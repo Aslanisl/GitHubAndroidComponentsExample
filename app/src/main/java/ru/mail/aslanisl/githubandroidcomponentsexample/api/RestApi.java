@@ -1,4 +1,4 @@
-package ru.mail.aslanisl.githubandroidcomponentsexample.data.network;
+package ru.mail.aslanisl.githubandroidcomponentsexample.api;
 
 import android.arch.lifecycle.LiveData;
 
@@ -16,8 +16,8 @@ import ru.mail.aslanisl.githubandroidcomponentsexample.models.UserModel;
 public interface RestApi {
 
     @GET("/users")
-    Call<LiveData<List<UserModel>>> getUsers();
+    LiveData<ApiResponse<List<UserModel>>> getUsers();
 
     @GET("/users/{username}")
-    Call<LiveData<UserModel>> getUser(@Path("username") String login);
+    LiveData<ApiResponse<UserModel>> getUser(@Path("username") String login);
 }

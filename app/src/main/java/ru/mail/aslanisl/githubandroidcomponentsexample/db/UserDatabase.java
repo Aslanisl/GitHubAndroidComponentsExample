@@ -1,4 +1,4 @@
-package ru.mail.aslanisl.githubandroidcomponentsexample.data.db;
+package ru.mail.aslanisl.githubandroidcomponentsexample.db;
 
 import android.arch.persistence.room.Database;
 import android.arch.persistence.room.RoomDatabase;

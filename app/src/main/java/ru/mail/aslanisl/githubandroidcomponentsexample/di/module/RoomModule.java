@@ -7,7 +7,7 @@ import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
-import ru.mail.aslanisl.githubandroidcomponentsexample.data.db.UserDatabase;
+import ru.mail.aslanisl.githubandroidcomponentsexample.db.UserDatabase;
 import ru.mail.aslanisl.githubandroidcomponentsexample.models.UserDao;
 import ru.mail.aslanisl.githubandroidcomponentsexample.repositories.UserRepository;
 import ru.mail.aslanisl.githubandroidcomponentsexample.repositories.UserRepositoryImpl;
