@@ -21,7 +21,7 @@ public class UsersViewModel extends ViewModel {
     private MutableLiveData<List<UserModel>> users;
 
     @Inject
-    private UserRepository mUserRepository;
+    UserRepository mUserRepository;
 
     public UsersViewModel(){
         App.getAppComponent().inject(this);

@@ -3,7 +3,7 @@ package ru.mail.aslanisl.githubandroidcomponentsexample;
 import android.app.Application;
 
 import ru.mail.aslanisl.githubandroidcomponentsexample.di.component.AppComponent;
-import ru.mail.aslanisl.githubandroidcomponentsexample.di.module.AppModule;
+import ru.mail.aslanisl.githubandroidcomponentsexample.di.component.DaggerAppComponent;
 import ru.mail.aslanisl.githubandroidcomponentsexample.di.module.RoomModule;
 
 /**
@@ -17,8 +17,7 @@ public class App extends Application {
     public App(){
 
         appComponent = DaggerAppComponent.builder()
-                .appModule(new AppModule(this))
-                .appModule(new RoomModule(this))
+                .roomModule(new RoomModule(this))
                 .build();
     }
 

@@ -12,10 +12,6 @@ import ru.mail.aslanisl.githubandroidcomponentsexample.models.UserModel;
 
 public interface UserRepository {
 
-    void insertUser(UserModel user);
-
-    void insertUsers(List<UserModel> users);
-
     LiveData<UserModel> getUser(int userId);
 
     LiveData<List<UserModel>> getUsers();
