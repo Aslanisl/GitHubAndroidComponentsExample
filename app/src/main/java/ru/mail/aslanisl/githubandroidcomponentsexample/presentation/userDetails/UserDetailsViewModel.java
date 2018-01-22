@@ -3,8 +3,6 @@ package ru.mail.aslanisl.githubandroidcomponentsexample.presentation.userDetails
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.ViewModel;
 
-import java.util.List;
-
 import javax.inject.Inject;
 
 import ru.mail.aslanisl.githubandroidcomponentsexample.App;
@@ -22,13 +20,17 @@ public class UserDetailsViewModel extends ViewModel {
     UserRepository userRepository;
 
     private LiveData<Resource<UserModel>> user;
+    private String currentLogin;
 
     public UserDetailsViewModel() {
         App.getAppComponent().inject(this);
     }
 
     public void setLogin(String login){
-        user = userRepository.getUser(login);
+        if (!login.equals(currentLogin)) {
+            currentLogin = login;
+            user = userRepository.getUser(login);
+        }
     }
 
     public LiveData<Resource<UserModel>> getUser(){
