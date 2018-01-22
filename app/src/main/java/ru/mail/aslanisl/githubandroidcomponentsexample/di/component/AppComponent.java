@@ -5,6 +5,7 @@ import javax.inject.Singleton;
 import dagger.Component;
 import ru.mail.aslanisl.githubandroidcomponentsexample.di.module.AppModule;
 import ru.mail.aslanisl.githubandroidcomponentsexample.di.module.UserModule;
+import ru.mail.aslanisl.githubandroidcomponentsexample.presentation.userDetails.UserDetailsViewModel;
 import ru.mail.aslanisl.githubandroidcomponentsexample.presentation.usersList.UsersViewModel;
 
 /**
@@ -14,4 +15,5 @@ import ru.mail.aslanisl.githubandroidcomponentsexample.presentation.usersList.Us
 @Component(modules = {AppModule.class, UserModule.class})
 public interface AppComponent {
     void inject(UsersViewModel usersViewModel);
+    void inject(UserDetailsViewModel userDetailsViewModel);
 }

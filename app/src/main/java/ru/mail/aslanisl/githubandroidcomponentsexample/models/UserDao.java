@@ -17,7 +17,7 @@ public interface UserDao {
     @Insert(onConflict = REPLACE)
     void insert(UserModel user);
 
-    @Query("SELECT * FROM user_table WHERE id = :login")
+    @Query("SELECT * FROM user_table WHERE login = :login")
     LiveData<UserModel> load(String login);
 
     @Insert(onConflict = REPLACE)

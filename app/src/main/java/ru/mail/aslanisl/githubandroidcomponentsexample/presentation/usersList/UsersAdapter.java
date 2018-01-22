@@ -24,11 +24,24 @@ import ru.mail.aslanisl.githubandroidcomponentsexample.utils.GlideApp;
 public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder>{
 
     private List<UserModel> userModels;
-    private Context context;
 
-    public UsersAdapter(List<UserModel> userModels, Context context) {
+    public interface OnUserClickListener{
+        void onUserClicked(String login);
+    }
+
+    private OnUserClickListener listener;
+
+    public UsersAdapter(List<UserModel> userModels) {
         this.userModels = userModels;
-        this.context = context;
+    }
+
+    public void updateUsers(List<UserModel> userModels){
+        this.userModels = userModels;
+        notifyDataSetChanged();
+    }
+
+    public void setUserListener(OnUserClickListener listener){
+        this.listener = listener;
     }
 
     @Override
@@ -53,15 +66,20 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder>{
     class ViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.item_user_avatar) ImageView avatar;
         @BindView(R.id.item_user_name) TextView name;
+        private View itemView;
 
         public ViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+            this.itemView = itemView;
         }
 
         public void bindHolder(UserModel user){
-            GlideApp.with(context).load(user.getAvatarUrl()).into(avatar);
-            name.setText(user.getName() != null ? user.getName() : "No name");
+            GlideApp.with(itemView.getContext()).load(user.getAvatarUrl()).into(avatar);
+            name.setText(user.getLogin() != null ? user.getLogin() : "No login");
+            itemView.setOnClickListener(v -> {
+                if (listener != null) listener.onUserClicked(user.getLogin());
+            });
         }
     }
 }

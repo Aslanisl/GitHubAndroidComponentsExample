@@ -54,6 +54,12 @@ public class UserModule {
 
     @Singleton
     @Provides
+    public AppExecutors providesAppExecutors(){
+        return new AppExecutors();
+    }
+
+    @Singleton
+    @Provides
     public ApiService provideApiService(){
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
         interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);

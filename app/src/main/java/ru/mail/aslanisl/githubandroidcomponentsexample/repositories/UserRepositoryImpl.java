@@ -44,7 +44,7 @@ public class UserRepositoryImpl implements UserRepository{
 
             @Override
             protected boolean shouldFetch(@Nullable UserModel data) {
-                return data == null;
+                return data == null || data.getName() == null;
             }
 
             @NonNull

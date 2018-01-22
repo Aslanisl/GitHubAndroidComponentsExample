@@ -1,7 +1,6 @@
-package ru.mail.aslanisl.githubandroidcomponentsexample.presentation.usersList;
+package ru.mail.aslanisl.githubandroidcomponentsexample.presentation.userDetails;
 
 import android.arch.lifecycle.LiveData;
-import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
 
 import java.util.List;
@@ -14,22 +13,25 @@ import ru.mail.aslanisl.githubandroidcomponentsexample.models.UserModel;
 import ru.mail.aslanisl.githubandroidcomponentsexample.repositories.UserRepository;
 
 /**
- * Created by Ivan on 17.01.2018.
+ * Created by Ivan on 22.01.2018.
  */
 
-public class UsersViewModel extends ViewModel {
-
-    private LiveData<Resource<List<UserModel>>> users;
+public class UserDetailsViewModel extends ViewModel {
 
     @Inject
-    UserRepository mUserRepository;
+    UserRepository userRepository;
 
-    public UsersViewModel(){
+    private LiveData<Resource<UserModel>> user;
+
+    public UserDetailsViewModel() {
         App.getAppComponent().inject(this);
-        users = mUserRepository.getUsers();
     }
 
-    public LiveData<Resource<List<UserModel>>> getUsers(){
-        return users;
+    public void setLogin(String login){
+        user = userRepository.getUser(login);
+    }
+
+    public LiveData<Resource<UserModel>> getUser(){
+        return user;
     }
 }

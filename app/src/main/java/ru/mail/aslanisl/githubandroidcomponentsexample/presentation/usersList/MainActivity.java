@@ -1,6 +1,7 @@
 package ru.mail.aslanisl.githubandroidcomponentsexample.presentation.usersList;
 
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -18,11 +19,13 @@ import butterknife.ButterKnife;
 import ru.mail.aslanisl.githubandroidcomponentsexample.R;
 import ru.mail.aslanisl.githubandroidcomponentsexample.models.Status;
 import ru.mail.aslanisl.githubandroidcomponentsexample.models.UserModel;
+import ru.mail.aslanisl.githubandroidcomponentsexample.presentation.userDetails.UserDetailsActivity;
 
 public class MainActivity extends AppCompatActivity {
 
     @BindView(R.id.users_loading) ProgressBar usersLoading;
     @BindView(R.id.users_recycler) RecyclerView usersRecycler;
+    private UsersAdapter usersAdapter;
     private UsersViewModel usersViewModel;
 
     @Override
@@ -43,9 +46,20 @@ public class MainActivity extends AppCompatActivity {
                 } else if (userModels.getStatus() == Status.SUCCESS){
                     usersLoading.setVisibility(View.GONE);
                     usersRecycler.setVisibility(View.VISIBLE);
-                    UsersAdapter adapter = new UsersAdapter(userModels.getData(), this);
-                    usersRecycler.setAdapter(adapter);
-                    usersRecycler.setLayoutManager(new LinearLayoutManager(this));
+                    if (usersAdapter == null) {
+                        usersAdapter = new UsersAdapter(userModels.getData());
+                        usersRecycler.setAdapter(usersAdapter);
+                        usersRecycler.setLayoutManager(new LinearLayoutManager(this));
+                        usersAdapter.setUserListener(login -> {
+                            if (login != null) {
+                                Intent intent = new Intent(this, UserDetailsActivity.class);
+                                intent.putExtra(UserDetailsActivity.KEY_LOGIN, login);
+                                startActivity(intent);
+                            }
+                        });
+                    } else {
+                        usersAdapter.updateUsers(userModels.getData());
+                    }
                 }
             }
         });
