@@ -9,6 +9,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import ru.mail.aslanisl.githubandroidcomponentsexample.App;
+import ru.mail.aslanisl.githubandroidcomponentsexample.models.Resource;
 import ru.mail.aslanisl.githubandroidcomponentsexample.models.UserModel;
 import ru.mail.aslanisl.githubandroidcomponentsexample.repositories.UserRepository;
 
@@ -27,7 +28,7 @@ public class UsersViewModel extends ViewModel {
         App.getAppComponent().inject(this);
     }
 
-    public LiveData<List<UserModel>> getUsers(){
+    public LiveData<Resource<List<UserModel>>> getUsers(){
         return mUserRepository.getUsers();
     }
 }

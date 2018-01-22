@@ -13,7 +13,7 @@ import ru.mail.aslanisl.githubandroidcomponentsexample.models.UserModel;
  * Created by Ivan on 17.01.2018.
  */
 
-public interface RestApi {
+public interface ApiService {
 
     @GET("/users")
     LiveData<ApiResponse<List<UserModel>>> getUsers();

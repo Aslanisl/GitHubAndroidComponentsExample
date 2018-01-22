@@ -10,9 +10,6 @@ import retrofit2.CallAdapter;
 import retrofit2.Retrofit;
 import ru.mail.aslanisl.githubandroidcomponentsexample.api.ApiResponse;
 
-/**
- * Created by Ivan on 19.01.2018.
- */
 
 public class LiveDataCallAdapterFactory extends CallAdapter.Factory {
 

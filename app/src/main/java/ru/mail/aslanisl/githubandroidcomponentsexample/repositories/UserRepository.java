@@ -4,6 +4,7 @@ import android.arch.lifecycle.LiveData;
 
 import java.util.List;
 
+import ru.mail.aslanisl.githubandroidcomponentsexample.models.Resource;
 import ru.mail.aslanisl.githubandroidcomponentsexample.models.UserModel;
 
 /**
@@ -12,7 +13,7 @@ import ru.mail.aslanisl.githubandroidcomponentsexample.models.UserModel;
 
 public interface UserRepository {
 
-    LiveData<UserModel> getUser(int userId);
+    LiveData<Resource<UserModel>> getUser(String login);
 
-    LiveData<List<UserModel>> getUsers();
+    LiveData<Resource<List<UserModel>>> getUsers();
 }

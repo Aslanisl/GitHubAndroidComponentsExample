@@ -29,6 +29,13 @@ public class UserModel {
     @Expose
     private String name;
 
+    public UserModel(int id, String login, String avatarUrl, String name) {
+        this.id = id;
+        this.login = login;
+        this.avatarUrl = avatarUrl;
+        this.name = name;
+    }
+
     public int getId() {
         return id;
     }

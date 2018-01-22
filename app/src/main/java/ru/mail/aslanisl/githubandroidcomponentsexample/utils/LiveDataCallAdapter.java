@@ -15,10 +15,6 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import ru.mail.aslanisl.githubandroidcomponentsexample.api.ApiResponse;
 
-/**
- * A Retrofit adapter that converts the Call into a LiveData of ApiResponse.
- * @param <R>
- */
 public class LiveDataCallAdapter<R> implements CallAdapter<R, LiveData<ApiResponse<R>>> {
     private final Type responseType;
     public LiveDataCallAdapter(Type responseType) {

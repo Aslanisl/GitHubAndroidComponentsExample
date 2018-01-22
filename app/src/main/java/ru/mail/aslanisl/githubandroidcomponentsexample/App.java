@@ -4,7 +4,7 @@ import android.app.Application;
 
 import ru.mail.aslanisl.githubandroidcomponentsexample.di.component.AppComponent;
 import ru.mail.aslanisl.githubandroidcomponentsexample.di.component.DaggerAppComponent;
-import ru.mail.aslanisl.githubandroidcomponentsexample.di.module.RoomModule;
+import ru.mail.aslanisl.githubandroidcomponentsexample.di.module.UserModule;
 
 /**
  * Created by Ivan on 17.01.2018.
@@ -17,7 +17,7 @@ public class App extends Application {
     public App(){
 
         appComponent = DaggerAppComponent.builder()
-                .roomModule(new RoomModule(this))
+                .userModule(new UserModule(this))
                 .build();
     }
 
