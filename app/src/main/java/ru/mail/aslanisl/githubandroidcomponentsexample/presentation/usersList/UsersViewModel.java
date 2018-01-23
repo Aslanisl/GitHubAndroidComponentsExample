@@ -11,6 +11,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import ru.mail.aslanisl.githubandroidcomponentsexample.App;
+import ru.mail.aslanisl.githubandroidcomponentsexample.api.ApiResponse;
 import ru.mail.aslanisl.githubandroidcomponentsexample.models.Resource;
 import ru.mail.aslanisl.githubandroidcomponentsexample.models.Status;
 import ru.mail.aslanisl.githubandroidcomponentsexample.models.UserModel;
@@ -33,6 +34,25 @@ public class UsersViewModel extends ViewModel {
     }
 
     public LiveData<Resource<List<UserModel>>> getUsers(){
+        if (usersList.isEmpty()){
+            // Loading from id 0
+            LiveData<Resource<List<UserModel>>> usersResponse = userRepository.getUsers(0);
+            users.addSource(usersResponse, listResource -> {
+                if (listResource != null
+                        && (listResource.getStatus() == Status.SUCCESS || listResource.getStatus() == Status.ERROR)) {
+                    users.removeSource(usersResponse);
+                    if (listResource.getData() != null && !listResource.getData().isEmpty()){
+                        usersList.clear();
+                        usersList.addAll(listResource.getData());
+                    }
+                }
+                users.setValue(listResource);
+            });
+        }
+        return users;
+    }
+
+    public LiveData<Resource<List<UserModel>>> loadMore(){
         int lastId = 0;
         if (!usersList.isEmpty()){
             lastId = usersList.get(usersList.size() - 1).getId();
@@ -46,8 +66,8 @@ public class UsersViewModel extends ViewModel {
                     usersList.addAll(listResource.getData());
                 }
             }
-            users.setValue(listResource);
+            users.setValue(Resource.success(usersList));
         });
-        return users;
+        return usersResponse;
     }
 }
