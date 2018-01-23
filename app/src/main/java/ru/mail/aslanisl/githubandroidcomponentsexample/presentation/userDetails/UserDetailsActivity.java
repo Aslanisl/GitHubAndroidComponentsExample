@@ -14,6 +14,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import ru.mail.aslanisl.githubandroidcomponentsexample.R;
 import ru.mail.aslanisl.githubandroidcomponentsexample.models.Status;
+import ru.mail.aslanisl.githubandroidcomponentsexample.models.UserDetailsModel;
 import ru.mail.aslanisl.githubandroidcomponentsexample.models.UserModel;
 import ru.mail.aslanisl.githubandroidcomponentsexample.utils.GlideApp;
 
@@ -52,7 +53,7 @@ public class UserDetailsActivity extends AppCompatActivity {
                     progressBar.setVisibility(View.GONE);
                     avatar.setVisibility(View.VISIBLE);
                     name.setVisibility(View.VISIBLE);
-                    UserModel user = resource.getData();
+                    UserDetailsModel user = resource.getData();
                     GlideApp.with(this).load(user.getAvatarUrl()).into(avatar);
                     name.setText(user.getName() != null ? user.getName() : user.getLogin());
                 }

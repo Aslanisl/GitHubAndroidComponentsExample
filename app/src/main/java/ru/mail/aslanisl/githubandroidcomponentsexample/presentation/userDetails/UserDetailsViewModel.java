@@ -7,7 +7,7 @@ import javax.inject.Inject;
 
 import ru.mail.aslanisl.githubandroidcomponentsexample.App;
 import ru.mail.aslanisl.githubandroidcomponentsexample.models.Resource;
-import ru.mail.aslanisl.githubandroidcomponentsexample.models.UserModel;
+import ru.mail.aslanisl.githubandroidcomponentsexample.models.UserDetailsModel;
 import ru.mail.aslanisl.githubandroidcomponentsexample.repositories.UserRepository;
 
 /**
@@ -19,7 +19,7 @@ public class UserDetailsViewModel extends ViewModel {
     @Inject
     UserRepository userRepository;
 
-    private LiveData<Resource<UserModel>> user;
+    private LiveData<Resource<UserDetailsModel>> user;
     private String currentLogin;
 
     public UserDetailsViewModel() {
@@ -33,7 +33,7 @@ public class UserDetailsViewModel extends ViewModel {
         }
     }
 
-    public LiveData<Resource<UserModel>> getUser(){
+    public LiveData<Resource<UserDetailsModel>> getUser(){
         return user;
     }
 }

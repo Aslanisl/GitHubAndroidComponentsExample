@@ -20,6 +20,7 @@ import ru.mail.aslanisl.githubandroidcomponentsexample.R;
 import ru.mail.aslanisl.githubandroidcomponentsexample.models.Status;
 import ru.mail.aslanisl.githubandroidcomponentsexample.models.UserModel;
 import ru.mail.aslanisl.githubandroidcomponentsexample.presentation.userDetails.UserDetailsActivity;
+import ru.mail.aslanisl.githubandroidcomponentsexample.utils.EndlessRecyclerOnScrollListener;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -41,15 +42,21 @@ public class MainActivity extends AppCompatActivity {
         usersViewModel.getUsers().observe(this, userModels -> {
             if (userModels != null){
                 if (userModels.getStatus() == Status.LOADING){
-                    usersLoading.setVisibility(View.VISIBLE);
-                    usersRecycler.setVisibility(View.GONE);
-                } else if (userModels.getStatus() == Status.SUCCESS){
+                    if (usersAdapter == null) {
+                        usersLoading.setVisibility(View.VISIBLE);
+                        usersRecycler.setVisibility(View.GONE);
+                    }
+                } else if (userModels.getStatus() == Status.SUCCESS && userModels.getData() != null){
                     usersLoading.setVisibility(View.GONE);
                     usersRecycler.setVisibility(View.VISIBLE);
+
                     if (usersAdapter == null) {
-                        usersAdapter = new UsersAdapter(userModels.getData());
+                        usersAdapter = new UsersAdapter();
                         usersRecycler.setAdapter(usersAdapter);
                         usersRecycler.setLayoutManager(new LinearLayoutManager(this));
+                        usersRecycler.addOnScrollListener(new EndlessRecyclerOnScrollListener(() -> {
+                            usersViewModel.getUsers();
+                        }));
                         usersAdapter.setUserListener(login -> {
                             if (login != null) {
                                 Intent intent = new Intent(this, UserDetailsActivity.class);
@@ -57,9 +64,8 @@ public class MainActivity extends AppCompatActivity {
                                 startActivity(intent);
                             }
                         });
-                    } else {
-                        usersAdapter.updateUsers(userModels.getData());
                     }
+                    usersAdapter.updateUsers(userModels.getData());
                 }
             }
         });

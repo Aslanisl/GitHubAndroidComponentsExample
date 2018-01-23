@@ -7,10 +7,10 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 /**
- * Created by Ivan on 17.01.2018.
+ * Created by Ivan on 23.01.2018.
  */
-@Entity(tableName = "user_table")
-public class UserModel {
+@Entity(tableName = "user_details_table")
+public class UserDetailsModel {
 
     @SerializedName("login")
     @Expose
@@ -25,10 +25,15 @@ public class UserModel {
     @Expose
     private String avatarUrl;
 
-    public UserModel(int id, String login, String avatarUrl) {
-        this.id = id;
+    @SerializedName("name")
+    @Expose
+    private String name;
+
+    public UserDetailsModel(String login, int id, String avatarUrl, String name) {
         this.login = login;
+        this.id = id;
         this.avatarUrl = avatarUrl;
+        this.name = name;
     }
 
     public int getId() {
@@ -55,4 +60,11 @@ public class UserModel {
         this.avatarUrl = avatarUrl;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 }

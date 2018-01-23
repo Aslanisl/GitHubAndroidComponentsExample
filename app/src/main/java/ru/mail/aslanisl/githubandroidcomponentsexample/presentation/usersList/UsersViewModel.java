@@ -1,15 +1,18 @@
 package ru.mail.aslanisl.githubandroidcomponentsexample.presentation.usersList;
 
 import android.arch.lifecycle.LiveData;
+import android.arch.lifecycle.MediatorLiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
 
 import ru.mail.aslanisl.githubandroidcomponentsexample.App;
 import ru.mail.aslanisl.githubandroidcomponentsexample.models.Resource;
+import ru.mail.aslanisl.githubandroidcomponentsexample.models.Status;
 import ru.mail.aslanisl.githubandroidcomponentsexample.models.UserModel;
 import ru.mail.aslanisl.githubandroidcomponentsexample.repositories.UserRepository;
 
@@ -19,17 +22,32 @@ import ru.mail.aslanisl.githubandroidcomponentsexample.repositories.UserReposito
 
 public class UsersViewModel extends ViewModel {
 
-    private LiveData<Resource<List<UserModel>>> users;
+    private MediatorLiveData<Resource<List<UserModel>>> users = new MediatorLiveData<>();
+    private List<UserModel> usersList = new ArrayList<>();
 
     @Inject
-    UserRepository mUserRepository;
+    UserRepository userRepository;
 
     public UsersViewModel(){
         App.getAppComponent().inject(this);
-        users = mUserRepository.getUsers();
     }
 
     public LiveData<Resource<List<UserModel>>> getUsers(){
+        int lastId = 0;
+        if (!usersList.isEmpty()){
+            lastId = usersList.get(usersList.size() - 1).getId();
+        }
+        LiveData<Resource<List<UserModel>>> usersResponse = userRepository.getUsers(lastId);
+        users.addSource(usersResponse, listResource -> {
+            if (listResource != null
+                    && (listResource.getStatus() == Status.SUCCESS || listResource.getStatus() == Status.ERROR)) {
+                users.removeSource(usersResponse);
+                if (listResource.getData() != null && !listResource.getData().isEmpty()){
+                    usersList.addAll(listResource.getData());
+                }
+            }
+            users.setValue(listResource);
+        });
         return users;
     }
 }

@@ -21,8 +21,11 @@ public interface UserDao {
     LiveData<UserModel> load(String login);
 
     @Insert(onConflict = REPLACE)
-    void inserAll(List<UserModel> users);
+    void insertAll(List<UserModel> users);
 
     @Query("SELECT * FROM user_table")
     LiveData<List<UserModel>> loadUsers();
+
+    @Query("SELECT * FROM user_table WHERE id > :fromId LIMIT 30")
+    LiveData<List<UserModel>> loadUsers(int fromId);
 }

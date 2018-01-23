@@ -13,6 +13,8 @@ import ru.mail.aslanisl.githubandroidcomponentsexample.api.ApiResponse;
 import ru.mail.aslanisl.githubandroidcomponentsexample.api.ApiService;
 import ru.mail.aslanisl.githubandroidcomponentsexample.models.Resource;
 import ru.mail.aslanisl.githubandroidcomponentsexample.models.UserDao;
+import ru.mail.aslanisl.githubandroidcomponentsexample.models.UserDetailsDao;
+import ru.mail.aslanisl.githubandroidcomponentsexample.models.UserDetailsModel;
 import ru.mail.aslanisl.githubandroidcomponentsexample.models.UserModel;
 import ru.mail.aslanisl.githubandroidcomponentsexample.utils.AppExecutors;
 import ru.mail.aslanisl.githubandroidcomponentsexample.utils.NetworkBoundResource;
@@ -24,66 +26,68 @@ import ru.mail.aslanisl.githubandroidcomponentsexample.utils.NetworkBoundResourc
 public class UserRepositoryImpl implements UserRepository{
 
     private UserDao userDao;
+    private UserDetailsDao userDetailsDao;
     private ApiService apiService;
     private AppExecutors appExecutors;
 
     @Inject
-    public UserRepositoryImpl(UserDao userDao, ApiService apiService, AppExecutors appExecutors) {
+    public UserRepositoryImpl(UserDao userDao, UserDetailsDao userDetailsDao, ApiService apiService, AppExecutors appExecutors) {
         this.userDao = userDao;
+        this.userDetailsDao = userDetailsDao;
         this.apiService = apiService;
         this.appExecutors = appExecutors;
     }
 
     @Override
-    public LiveData<Resource<UserModel>> getUser(final String login) {
-        return new NetworkBoundResource<UserModel, UserModel>(appExecutors){
+    public LiveData<Resource<UserDetailsModel>> getUser(final String login) {
+        return new NetworkBoundResource<UserDetailsModel, UserDetailsModel>(appExecutors){
             @Override
-            protected void saveCallResult(@NonNull UserModel item) {
-                userDao.insert(item);
+            protected void saveCallResult(@NonNull UserDetailsModel item) {
+                userDetailsDao.insert(item);
             }
 
             @Override
-            protected boolean shouldFetch(@Nullable UserModel data) {
-                return data == null || data.getName() == null;
-            }
-
-            @NonNull
-            @Override
-            protected LiveData<UserModel> loadFromDb() {
-                return userDao.load(login);
+            protected boolean shouldFetch(@Nullable UserDetailsModel data) {
+                return data == null;
             }
 
             @NonNull
             @Override
-            protected LiveData<ApiResponse<UserModel>> createCall() {
+            protected LiveData<UserDetailsModel> loadFromDb() {
+                return userDetailsDao.load(login);
+            }
+
+            @NonNull
+            @Override
+            protected LiveData<ApiResponse<UserDetailsModel>> createCall() {
                 return apiService.getUser(login);
             }
         }.asLiveData();
     }
 
     @Override
-    public LiveData<Resource<List<UserModel>>> getUsers(){
+    public LiveData<Resource<List<UserModel>>> getUsers(int fromId){
         return new NetworkBoundResource<List<UserModel>, List<UserModel>>(appExecutors){
             @Override
             protected void saveCallResult(@NonNull List<UserModel> item) {
-                userDao.inserAll(item);
+                userDao.insertAll(item);
             }
 
             @Override
             protected boolean shouldFetch(@Nullable List<UserModel> data) {
-                return data == null || data.isEmpty();
+                return data == null || data.isEmpty() || data.get(data.size() - 1).getId() <= fromId;
             }
 
             @NonNull
             @Override
             protected LiveData<List<UserModel>> loadFromDb() {
-                return userDao.loadUsers();
+                return userDao.loadUsers(fromId);
             }
 
             @NonNull
             @Override
             protected LiveData<ApiResponse<List<UserModel>>> createCall() {
-                return apiService.getUsers();
+                return apiService.getUsers(fromId);
             }
         }.asLiveData();
     }

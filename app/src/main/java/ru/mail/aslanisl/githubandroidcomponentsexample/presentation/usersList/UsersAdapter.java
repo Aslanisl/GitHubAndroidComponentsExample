@@ -1,6 +1,8 @@
 package ru.mail.aslanisl.githubandroidcomponentsexample.presentation.usersList;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
+import android.support.v7.util.DiffUtil;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +18,7 @@ import butterknife.ButterKnife;
 import ru.mail.aslanisl.githubandroidcomponentsexample.R;
 import ru.mail.aslanisl.githubandroidcomponentsexample.models.UserModel;
 import ru.mail.aslanisl.githubandroidcomponentsexample.utils.GlideApp;
+import ru.mail.aslanisl.githubandroidcomponentsexample.utils.UserDiffCallback;
 
 /**
  * Created by Ivan on 22.01.2018.
@@ -23,7 +26,7 @@ import ru.mail.aslanisl.githubandroidcomponentsexample.utils.GlideApp;
 
 public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder>{
 
-    private List<UserModel> userModels;
+    private List<UserModel> userModels = new ArrayList<>();
 
     public interface OnUserClickListener{
         void onUserClicked(String login);
@@ -31,13 +34,10 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder>{
 
     private OnUserClickListener listener;
 
-    public UsersAdapter(List<UserModel> userModels) {
-        this.userModels = userModels;
-    }
-
-    public void updateUsers(List<UserModel> userModels){
-        this.userModels = userModels;
-        notifyDataSetChanged();
+    public void updateUsers(@NonNull List<UserModel> userModels){
+        int lastSize = this.userModels.size();
+        this.userModels.addAll(userModels);
+        notifyItemRangeInserted(lastSize, userModels.size());
     }
 
     public void setUserListener(OnUserClickListener listener){
@@ -54,7 +54,9 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder>{
     public void onBindViewHolder(ViewHolder holder, int position) {
         if (position < userModels.size()){
             UserModel user = userModels.get(position);
-            if (user != null) holder.bindHolder(user);
+            holder.bindHolder(user);
+        } else {
+            holder.bindHolder(null);
         }
     }
 
@@ -75,11 +77,16 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder>{
         }
 
         public void bindHolder(UserModel user){
-            GlideApp.with(itemView.getContext()).load(user.getAvatarUrl()).into(avatar);
-            name.setText(user.getLogin() != null ? user.getLogin() : "No login");
-            itemView.setOnClickListener(v -> {
-                if (listener != null) listener.onUserClicked(user.getLogin());
-            });
+            if (user != null) {
+                itemView.setVisibility(View.VISIBLE);
+                GlideApp.with(itemView.getContext()).load(user.getAvatarUrl()).into(avatar);
+                name.setText(user.getLogin() != null ? user.getLogin() : "No login");
+                itemView.setOnClickListener(v -> {
+                    if (listener != null) listener.onUserClicked(user.getLogin());
+                });
+            } else {
+                itemView.setVisibility(View.GONE);
+            }
         }
     }
 }

@@ -17,6 +17,7 @@ import ru.mail.aslanisl.githubandroidcomponentsexample.BuildConfig;
 import ru.mail.aslanisl.githubandroidcomponentsexample.api.ApiService;
 import ru.mail.aslanisl.githubandroidcomponentsexample.db.UserDatabase;
 import ru.mail.aslanisl.githubandroidcomponentsexample.models.UserDao;
+import ru.mail.aslanisl.githubandroidcomponentsexample.models.UserDetailsDao;
 import ru.mail.aslanisl.githubandroidcomponentsexample.repositories.UserRepository;
 import ru.mail.aslanisl.githubandroidcomponentsexample.repositories.UserRepositoryImpl;
 import ru.mail.aslanisl.githubandroidcomponentsexample.utils.AppExecutors;
@@ -48,8 +49,14 @@ public class UserModule {
 
     @Singleton
     @Provides
-    public UserRepository providesRepository(UserDao userDao, ApiService apiService, AppExecutors appExecutors){
-        return new UserRepositoryImpl(userDao, apiService, appExecutors);
+    public UserDetailsDao providesUserDetailsDao(UserDatabase userDatabase) {
+        return userDatabase.userDetailsDao();
+    }
+
+    @Singleton
+    @Provides
+    public UserRepository providesRepository(UserDao userDao, UserDetailsDao userDetailsDao, ApiService apiService, AppExecutors appExecutors){
+        return new UserRepositoryImpl(userDao, userDetailsDao, apiService, appExecutors);
     }
 
     @Singleton
