@@ -64,9 +64,9 @@ public class UsersViewModel extends ViewModel {
                 users.removeSource(usersResponse);
                 if (listResource.getData() != null && !listResource.getData().isEmpty()){
                     usersList.addAll(listResource.getData());
+                    users.setValue(Resource.success(usersList));
                 }
             }
-            users.setValue(Resource.success(usersList));
         });
         return usersResponse;
     }
